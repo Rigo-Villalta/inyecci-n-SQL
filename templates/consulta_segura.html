@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <title>Consulta Segura</title>
+</head>
+<body>
+<a href="/">Inicio</a>
+<div style="text-align: center">
+    <div style="display: inline-block">
+        <p>Buscar un estudiante o materia por nombre</p>
+        <form method="post">
+            <div>
+                <label>Búsqueda: <input type="text" name="busqueda"/></label>
+            </div>
+            <br>
+            <div>
+                <label><input type="radio" id="estudiantes" value="estudiantes" name="tabla_seleccionada" checked/>Students</label>
+                <label><input type="radio" id="materias" value="materias" name="tabla_seleccionada"/>materias</label>
+            </div>
+            <br>
+            <button type="submit">Realiza búsqueda</button>
+        </form>
+    </div>
+</div>
+</body>
+</html>
