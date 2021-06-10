@@ -32,3 +32,6 @@ reiniciar:
   - 'INSERT INTO notas (id_estudiante, id_materia, nota) VALUES (2, 4, "8")'
   - 'INSERT INTO notas (id_estudiante, id_materia, nota) VALUES (2, 5, "8")'
   - 'INSERT INTO notas (id_estudiante, id_materia, nota) VALUES (2, 5, "7")'
+    # usuarios
+  - 'INSERT INTO usuarios (usuario, password_hash) values ("Administrador", "827ccb0eea8a706c4c34a16891f84e7b")'
+  - 'INSERT INTO usuarios (usuario, password_hash) values ("mfigueroa", "827ccb0eea8a706c4c34a16891f84e7b")'
