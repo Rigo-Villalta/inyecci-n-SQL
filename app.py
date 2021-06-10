@@ -52,12 +52,10 @@ def consulta_safe():
     if request.method == 'POST':
         busqueda = '%' + request.form.get('busqueda', '') + '%' 
         campo = request.form.get('campo', '')
-        print(campo)
-        print(type(campo))
         tabla = request.form.get('tabla_seleccionada', '')
         if (
             tabla == 'estudiantes' and (campo == 'nombre' or campo == 'carnet')
-            ) and (
+            ) or (
             tabla == 'materias' and (campo == 'nombre' or campo == 'codigo')
                 ):
             with DatabaseHelper() as database:
