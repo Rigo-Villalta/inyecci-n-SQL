@@ -28,9 +28,10 @@ def consulta_insegura():
         return render_template('consulta_insegura.html')
     if request.method == 'POST':
         busqueda = request.form.get('busqueda', '')
+        campo = request.form.get('campo', '')
         tabla = request.form.get('tabla_seleccionada', '')
         with DatabaseHelper() as database:
-            consulta = 'SELECT * FROM {0} WHERE nombre LIKE "%{1}%";'.format(tabla, busqueda)
+            consulta = 'SELECT * FROM {0} WHERE {1} LIKE "%{2}%";'.format(tabla, campo, busqueda)
             database.insertar(consulta)
             resultados = database.select(consulta)
             valores_retornados = list()
@@ -43,21 +44,32 @@ def consulta_insegura():
 def consulta_safe():
     """
     Aquí por el contrario realizamos la consulta con parámetros, de esta
-    forma se evita la inyección SQL y es segura
+    forma se evita la inyección SQL y los caracteres especiales son escapados
+    sin embargo se puede realizar la inyección al manipular el DOM.
     """
     if request.method == 'GET':
         return render_template('consulta_segura.html')
     if request.method == 'POST':
-        busqueda = '%' + request.form.get('busqueda', '') + '%'
+        busqueda = '%' + request.form.get('busqueda', '') + '%' 
+        campo = request.form.get('campo', '')
+        print(campo)
+        print(type(campo))
         tabla = request.form.get('tabla_seleccionada', '')
-        with DatabaseHelper() as database:
-            consulta = 'SELECT * FROM {0} WHERE nombre LIKE ?;'.format(tabla)
-            # Este método hace la diferencia en cuanto a una consulta
-            resultados = database.select_safe(consulta, (busqueda,))
-            valores_retornados = list()
-            for resultado in resultados:
-                valores_retornados.append(str(resultado))
-            return '<br>'.join(valores_retornados)
+        if (
+            tabla == 'estudiantes' and (campo == 'nombre' or campo == 'carnet')
+            ) and (
+            tabla == 'materias' and (campo == 'nombre' or campo == 'codigo')
+                ):
+            with DatabaseHelper() as database:
+                consulta = 'SELECT * FROM {0} WHERE nombre LIKE ?;'.format(tabla)
+                # Este método hace la diferencia en cuanto a una consulta
+                resultados = database.select_safe(consulta, (busqueda,))
+                valores_retornados = list()
+                for resultado in resultados:
+                    valores_retornados.append(str(resultado))
+                return '<br>'.join(valores_retornados)
+        else:
+            return 'No puede ingresar un campo o tabla inválido. <br><h5>No manipule el DOM </h5><br><p>Este incidente será reportado al administrador del sistema</p>'
 
 
 if __name__ == '__main__':
